@@ -4,9 +4,9 @@ module.exports = mongoose => {
             mac: String,
             name: String,
             location: Object,
+            address: String,
             battery: Number,
             rssi: Number,
-            devicename: String,
             description: String,
             site: {
                 type: mongoose.Schema.Types.ObjectID, ref: 'sites'
