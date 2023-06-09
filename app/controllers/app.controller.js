@@ -22,10 +22,17 @@ exports.getBeacons = (req, res) => {
 };
 
 exports.updateBeacon = (req, res) => {
-    console.log(req.body.data)
-    Beacon.updateOne({_id: req.body.id}, req.body.data)
+    Beacon.findOne({_id: req.body.id})
         .then(beacon => {
-            res.status(200).send({ beacon })
+            const {name, location, address, mac, description} = req.body.data;
+            beacon.name=name;
+            beacon.location=location;
+            beacon.address=address;
+            beacon.mac=mac;
+            beacon.description=description;
+            beacon.save().then(()=>{
+                res.status(200).send({ beacon })
+            })
         })  
         .catch(err => res.status(500).send({ err: err.message }))
 }
