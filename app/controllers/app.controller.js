@@ -6,6 +6,16 @@ const Beacon = db.beacon;
 const V = db.v;
 
 exports.addBeacon = (req, res) => {
+
+    Beacon.find({mac: req.body.mac})
+        .then(beacons => {
+            if(beacons.length > 0){
+                res.status(200).send({err: "The same device exists!"});
+            }
+        })
+        .catch(err => {
+            res.status(500).send({ err: err.message });
+        });
     Beacon.create({ ...req.body })
         .then(beacon => {
             res.status(200).send({ beacon });
