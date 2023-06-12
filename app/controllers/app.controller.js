@@ -95,6 +95,25 @@ exports.checkMAC = (req, res) => {
         .catch(err => res.status(500).send({ err: err.message }))
 }
 
+exports.checkEditMAC = (req, res) => {
+    const mac = req.body.mac;
+    const id  = req.body.id;
+    console.log("MAC => ", mac + "  && " + req.body.id);
+    
+    Beacon.findOne({mac: mac})
+        .then( beacon => {
+            if(beacon == null){
+                res.status(200).send({ exist: false });
+            } else {
+                if(beacon._id != id)
+                    res.status(200).send({ exist: true });
+                else
+                    res.status(200).send({ exist: false });
+            } 
+        })
+        .catch(err => res.status(500).send({ err: err.message }))
+}
+
 /** This is for analyzing services and characterics... */
 exports.v = async (req, res) => {
     try{
