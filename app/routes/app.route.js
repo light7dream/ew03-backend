@@ -14,6 +14,7 @@ module.exports = function (app) {
     app.post('/api/beacons/add', controller.addBeacon);
     app.post('/api/beacons/update', controller.updateBeacon);
     app.post('/api/beacons/delete', controller.delBeacon);
+    app.post('/api/beacons/checkMAC', controller.checkMAC);
     app.post('/api/v/', controller.v);
 
 };

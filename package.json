@@ -4,10 +4,8 @@
   "description": "Beacon management system that includes user authentication, audit, add beacons, and database",
   "main": "server.js",
   "scripts": {
-    "server-dev": "nodemon server.js",
-    "client-dev": "npm start --prefix client",
-    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",

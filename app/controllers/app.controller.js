@@ -7,22 +7,48 @@ const V = db.v;
 
 exports.addBeacon = (req, res) => {
 
-    Beacon.find({mac: req.body.mac})
-        .then(beacons => {
-            if(beacons.length > 0){
-                res.status(200).send({err: "The same device exists!"});
+    Beacon.findOne({mac: req.body.mac})
+        .then(beacon => {           
+          
+            if (beacon ==  null) {
+                console.log('new device');
+                Beacon.create({ ...req.body })
+                    .then(beacon => {
+                        res.status(200).send({ beacon , added: true});
+                    })
+                    .catch(err => {
+                        res.status(500).send({ err: err.message });
+                    });
+            } else {
+                res.status(200).send({beacon, added: false});
+                // res.status(500).send({ err: "The same device already exists!" });
+                // const {name, location, address, mac, description} = req.body.data;
+                console.log("The same device already exists!", req.body.name);
+                // Beacon.updateOne({_id: beacon.id}, {name: req.body.name, location: req.body.location, address: req.body.address, 
+                //          description: req.body.description},
+                //     function (err, docs) {
+                //         if (err){
+                //             console.log(err)
+                //         } else {
+                //             console.log("Updated Docs : ", docs);
+                //             // res.status(200).send({docs});
+                //         }
+                //     });
+
+                // beacon.name=req.body.name;
+                // beacon.location=req.body.location;
+                // beacon.address=req.body.address;
+                // beacon.description=req.body.description;
+                // beacon.save().then(()=>{
+                //     console.log("saved");
+                //      res.status(200).send({beacon, added: false});
+                // })
             }
-        })
-        .catch(err => {
-            res.status(500).send({ err: err.message });
-        });
-    Beacon.create({ ...req.body })
-        .then(beacon => {
-            res.status(200).send({ beacon });
-        })
-        .catch(err => {
-            res.status(500).send({ err: err.message });
-        });
+        })  
+        .catch(err => res.status(500).send({ err: err.message }))    
+        
+    
+
 };
 
 exports.getBeacons = (req, res) => {
@@ -52,6 +78,20 @@ exports.delBeacon = (req, res) => {
         .then(beacon => {
             res.status(200).send({ beacon: beacon })
         })  
+        .catch(err => res.status(500).send({ err: err.message }))
+}
+
+exports.checkMAC = (req, res) => {
+    const mac = req.body.mac;
+    console.log("MAC => ", mac);
+    Beacon.findOne({mac: mac})
+        .then( beacon => {
+            if(beacon == null){
+                res.status(200).send({ exist: false });
+            } else {
+                res.status(200).send({ exist: true });
+            }
+        })
         .catch(err => res.status(500).send({ err: err.message }))
 }
 
