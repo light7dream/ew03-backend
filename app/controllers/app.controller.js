@@ -61,19 +61,25 @@ exports.getBeacons = (req, res) => {
 };
 
 exports.updateBeacon = (req, res) => {
-    Beacon.findOne({_id: req.body.id})
-        .then(beacon => {
-            const {name, location, address, mac, description} = req.body.data;
+    console.log("update id = ", req.body.id);
+    Beacon.findOne({mac: req.body.mac})
+    .then(beacon => {
+        const {name, location, address, mac, description} = req.body.data;
+              console.log(req.body.data, name , beacon)
+
             beacon.name=name;
             beacon.location=location;
             beacon.address=address;
             beacon.mac=mac;
             beacon.description=description;
+            // beacon.groupid = "";
             beacon.save().then(()=>{
                 res.status(200).send({ beacon })
             })
         })  
-        .catch(err => res.status(500).send({ err: err.message }))
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({ err: err.message })})
 }
 
 exports.delBeacon = (req, res) => {
@@ -81,7 +87,8 @@ exports.delBeacon = (req, res) => {
         .then(beacon => {
             res.status(200).send({ beacon: beacon })
         })  
-        .catch(err => res.status(500).send({ err: err.message }))
+        .catch(err => {
+            res.status(500).send({ err: err.message })})
 }
 
 exports.checkMAC = (req, res) => {
