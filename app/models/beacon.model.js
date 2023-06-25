@@ -8,9 +8,11 @@ module.exports = mongoose => {
             battery: Number,
             rssi: Number,
             description: String,
+            groupid: String,
             site: {
                 type: mongoose.Schema.Types.ObjectID, ref: 'sites'
             },
+          
         },
         { timestamps: true }
     );
